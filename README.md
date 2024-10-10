@@ -29,7 +29,7 @@ The changelog created by cz (`cz bump --changelog`)will contain links to the Azu
 Install with pip
 `python -m pip install cz-azure-devops-conventional` 
 
-You need to use a cz config file that has the **required** additional value `azure_devops_project_base_url` and `github_repo` and may contain the **optional** value `project_prefix`.
+You need to use a cz config file that has the **required** additional value `azure_devops_project_base_url`.
 
 Example `.cz.yaml` config for this repository
 ```yaml
