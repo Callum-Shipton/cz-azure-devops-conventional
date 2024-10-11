@@ -26,8 +26,36 @@ def parse_subject(text):
 
 class AzureDevopsConventionalCz(BaseCommitizen):
     bump_pattern = defaults.bump_pattern
-    bump_map = defaults.bump_map
-    bump_map_major_version_zero = defaults.bump_map_major_version_zero
+
+    # bump all changes by at least patch level
+    bump_map = { 
+        "BREAKING CHANGE": defaults.MAJOR,
+        "feat": defaults.MINOR,
+        "fix": defaults.PATCH,
+        "refactor": defaults.PATCH,
+        "perf": defaults.PATCH,
+        "style": defaults.PATCH,
+        "test": defaults.PATCH,
+        "docs": defaults.PATCH,
+        "build": defaults.PATCH,
+        "ci": defaults.PATCH,
+        "chore": defaults.PATCH,        
+    }
+
+    bump_map_major_version_zero = {
+        "BREAKING CHANGE": defaults.MINOR,
+        "feat": defaults.MINOR,
+        "fix": defaults.PATCH,
+        "refactor": defaults.PATCH,
+        "perf": defaults.PATCH,
+        "style": defaults.PATCH,
+        "test": defaults.PATCH,
+        "docs": defaults.PATCH,
+        "build": defaults.PATCH,
+        "ci": defaults.PATCH,
+        "chore": defaults.PATCH,
+    }
+
     commit_parser = ConventionalCommitsCz.commit_parser
     changelog_pattern = defaults.bump_pattern
 
