@@ -14,7 +14,7 @@ setup(
     author="Callum Shipton",
     license="MIT",
     url="https://github.com/Callum-Shipton/cz-azure-devops-conventional",
-    install_requires=["commitizen=4.7.2"],
+    install_requires=["commitizen==4.7.2"],
     description="Extend the commitizen tools to create conventional commits and CHANGELOG that link to Azure Devops.",
     long_description=long_description,
     long_description_content_type="text/markdown",
