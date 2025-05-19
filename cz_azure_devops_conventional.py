@@ -25,7 +25,7 @@ def parse_subject(text):
 
 
 class AzureDevopsConventionalCz(BaseCommitizen):
-    bump_pattern = defaults.bump_pattern
+    bump_pattern = defaults.BUMP_PATTERN
 
     # bump all changes by at least patch level
     bump_map = { 
@@ -57,7 +57,7 @@ class AzureDevopsConventionalCz(BaseCommitizen):
     }
 
     commit_parser = ConventionalCommitsCz.commit_parser
-    changelog_pattern = defaults.bump_pattern
+    changelog_pattern = defaults.BUMP_PATTERN
 
     # Read the config file and check if required settings are available
     conf = config.read_cfg()
