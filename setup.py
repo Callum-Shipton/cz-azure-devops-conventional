@@ -9,12 +9,12 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="cz-azure-devops-conventional",
-    version="0.1.0",
+    version="0.1.1",
     py_modules=["cz_azure_devops_conventional"],
     author="Callum Shipton",
     license="MIT",
     url="https://github.com/Callum-Shipton/cz-azure-devops-conventional",
-    install_requires=["commitizen>=3.21.3"],
+    install_requires=["commitizen=4.7.2"],
     description="Extend the commitizen tools to create conventional commits and CHANGELOG that link to Azure Devops.",
     long_description=long_description,
     long_description_content_type="text/markdown",
