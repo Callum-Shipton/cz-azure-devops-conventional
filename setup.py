@@ -19,6 +19,9 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     entry_points={
+        "console_scripts": [
+            "cz-azure-devops-conventional = cz_azure_devops_conventional:main",
+        ],
         "commitizen.plugin": [
             "cz_azure_devops_conventional = cz_azure_devops_conventional:AzureDevopsConventionalCz"
         ]
