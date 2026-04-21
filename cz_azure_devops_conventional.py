@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import os
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, TYPE_CHECKING
 
 from commitizen.cz.base import BaseCommitizen
 from commitizen.cz.conventional_commits import ConventionalCommitsCz
@@ -8,13 +10,10 @@ from commitizen.defaults import BUMP_PATTERN, MAJOR, MINOR, PATCH
 from commitizen.cz.utils import multiple_line_breaker, required_validator
 from commitizen.cz.exceptions import CzException
 
+if TYPE_CHECKING:
+    from commitizen import git
+
 __all__ = ["AzureDevopsConventionalCz"]
-
-
-def main() -> int:
-    from commitizen.cli import main as commitizen_main
-
-    return commitizen_main()
 
 DEFAULT_CHANGE_TYPE_MAP = {
     "feat": "Feat",
@@ -247,13 +246,16 @@ class AzureDevopsConventionalCz(BaseCommitizen):
             return ""
         return m.group(3).strip()
 
-    def changelog_message_builder_hook(self, parsed_message: dict, commit: Any) -> dict:
+    def changelog_message_builder_hook(
+        self, parsed_message: Dict[str, Any], commit: git.GitCommit
+    ) -> Dict[str, Any]:
         azure_devops_project_base_url = self.config.settings.get(
             "azure_devops_project_base_url", None
         )
         if not azure_devops_project_base_url:
-            print("Failed to generate changelog: Azure Devops project base URL is not set in the config file.")
-            quit()
+            raise CzException(
+                "Failed to generate changelog: Azure Devops project base URL is not set in the config file."
+            )
 
         """add azure devops links to the readme"""
         if parsed_message["scope"]:
