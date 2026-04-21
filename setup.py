@@ -10,7 +10,7 @@ with open(path.join(this_directory, "README.md"), encoding="utf-8") as f:
 setup(
     name="cz-azure-devops-conventional",
     version="0.1.1",
-    py_modules=["cz_azure_devops_conventional"],
+    py_modules=["cz_azure_devops_conventional", "cz_azure_devops_conventional_cli"],
     author="Callum Shipton",
     license="MIT",
     url="https://github.com/Callum-Shipton/cz-azure-devops-conventional",
@@ -20,7 +20,7 @@ setup(
     long_description_content_type="text/markdown",
     entry_points={
         "console_scripts": [
-            "cz-azure-devops-conventional = cz_azure_devops_conventional:main",
+            "cz-azure-devops-conventional = cz_azure_devops_conventional_cli:main",
         ],
         "commitizen.plugin": [
             "cz_azure_devops_conventional = cz_azure_devops_conventional:AzureDevopsConventionalCz"
