@@ -1,19 +1,19 @@
+from __future__ import annotations
+
 import os
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, TYPE_CHECKING
 
-from commitizen import defaults, git, config
-from commitizen.cli import main as commitizen_main
 from commitizen.cz.base import BaseCommitizen
 from commitizen.cz.conventional_commits import ConventionalCommitsCz
+from commitizen.defaults import BUMP_PATTERN, MAJOR, MINOR, PATCH
 from commitizen.cz.utils import multiple_line_breaker, required_validator
 from commitizen.cz.exceptions import CzException
 
+if TYPE_CHECKING:
+    from commitizen import git
+
 __all__ = ["AzureDevopsConventionalCz"]
-
-
-def main() -> int:
-    return commitizen_main()
 
 DEFAULT_CHANGE_TYPE_MAP = {
     "feat": "Feat",
@@ -30,52 +30,41 @@ def parse_subject(text):
 
 
 class AzureDevopsConventionalCz(BaseCommitizen):
-    bump_pattern = defaults.BUMP_PATTERN
+    bump_pattern = BUMP_PATTERN
 
     # bump all changes by at least patch level
     bump_map = { 
-        "BREAKING CHANGE": defaults.MAJOR,
-        "feat": defaults.MINOR,
-        "fix": defaults.PATCH,
-        "refactor": defaults.PATCH,
-        "perf": defaults.PATCH,
-        "style": defaults.PATCH,
-        "test": defaults.PATCH,
-        "docs": defaults.PATCH,
-        "build": defaults.PATCH,
-        "ci": defaults.PATCH,
-        "chore": defaults.PATCH,        
+        "BREAKING CHANGE": MAJOR,
+        "feat": MINOR,
+        "fix": PATCH,
+        "refactor": PATCH,
+        "perf": PATCH,
+        "style": PATCH,
+        "test": PATCH,
+        "docs": PATCH,
+        "build": PATCH,
+        "ci": PATCH,
+        "chore": PATCH,        
     }
 
     bump_map_major_version_zero = {
-        "BREAKING CHANGE": defaults.MINOR,
-        "feat": defaults.MINOR,
-        "fix": defaults.PATCH,
-        "refactor": defaults.PATCH,
-        "perf": defaults.PATCH,
-        "style": defaults.PATCH,
-        "test": defaults.PATCH,
-        "docs": defaults.PATCH,
-        "build": defaults.PATCH,
-        "ci": defaults.PATCH,
-        "chore": defaults.PATCH,
+        "BREAKING CHANGE": MINOR,
+        "feat": MINOR,
+        "fix": PATCH,
+        "refactor": PATCH,
+        "perf": PATCH,
+        "style": PATCH,
+        "test": PATCH,
+        "docs": PATCH,
+        "build": PATCH,
+        "ci": PATCH,
+        "chore": PATCH,
     }
 
     commit_parser = ConventionalCommitsCz.commit_parser
-    changelog_pattern = defaults.BUMP_PATTERN
-
-    # Read the config file and check if required settings are available
-    conf = config.read_cfg()
+    changelog_pattern = BUMP_PATTERN
     work_item_multiple_hint = "42, 123"
-
-    azure_devops_project_base_url = conf.settings.get("azure_devops_project_base_url", None)
-
-    if "change_type_map" not in conf.settings:
-        change_type_map = DEFAULT_CHANGE_TYPE_MAP
-    else:
-        # change_type_map = conf.settings["change_type_map"]
-        print("Only default change type map is supported at the moment.")
-        quit()
+    change_type_map = DEFAULT_CHANGE_TYPE_MAP
 
     def questions(self) -> List[Dict[str, Any]]:
         questions: List[Dict[str, Any]] = [
@@ -258,18 +247,21 @@ class AzureDevopsConventionalCz(BaseCommitizen):
         return m.group(3).strip()
 
     def changelog_message_builder_hook(
-        self, parsed_message: dict, commit: git.GitCommit
-    ) -> dict:
-        
-        if not self.azure_devops_project_base_url:
-            print("Failed to generate changelog: Azure Devops project base URL is not set in the config file.")
-            quit()
+        self, parsed_message: Dict[str, Any], commit: git.GitCommit
+    ) -> Dict[str, Any]:
+        azure_devops_project_base_url = self.config.settings.get(
+            "azure_devops_project_base_url", None
+        )
+        if not azure_devops_project_base_url:
+            raise CzException(
+                "Failed to generate changelog: Azure Devops project base URL is not set in the config file."
+            )
 
         """add azure devops links to the readme"""
         if parsed_message["scope"]:
             parsed_message["scope"] = " ".join(
                 [
-                    f"[{work_item_id}]({self.azure_devops_project_base_url}/_workitems/edit/{work_item_id.lstrip('#')})"
+                    f"[{work_item_id}]({azure_devops_project_base_url}/_workitems/edit/{work_item_id.lstrip('#')})"
                     for work_item_id in parsed_message["scope"].split(",")
                 ]
             )
