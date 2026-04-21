@@ -3,12 +3,17 @@ import re
 from typing import Any, Dict, List
 
 from commitizen import defaults, git, config
+from commitizen.cli import main as commitizen_main
 from commitizen.cz.base import BaseCommitizen
 from commitizen.cz.conventional_commits import ConventionalCommitsCz
 from commitizen.cz.utils import multiple_line_breaker, required_validator
 from commitizen.cz.exceptions import CzException
 
 __all__ = ["AzureDevopsConventionalCz"]
+
+
+def main() -> int:
+    return commitizen_main()
 
 DEFAULT_CHANGE_TYPE_MAP = {
     "feat": "Feat",
