@@ -27,10 +27,14 @@ The changelog created by cz (`cz bump --changelog`)will contain links to the Azu
 ## Installation
 
 Install with pip
-`python -m pip install cz-azure-devops-conventional` 
+```bash
+python -m pip install cz-azure-devops-conventional
+```
 
 Install with uv
-`uv tool install git+https://github.com/Callum-Shipton/cz-azure-devops-conventional`
+```bash
+uv tool install git+https://github.com/Callum-Shipton/cz-azure-devops-conventional
+```
 
 You need to use a cz config file that has the **required** additional value `azure_devops_project_base_url`.
 
